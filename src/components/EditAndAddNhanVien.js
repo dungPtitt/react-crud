@@ -1,24 +1,25 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import petService from '../services/PetService';
+import nhanVienService from '../services/nhanVienService';
 
-export default function EditAndAddPet() {
+export default function EditAndAddNhanVien() {
   const {id} = useParams();
   const navigate = useNavigate();
-  const [pet, setPet] = useState({
-    id: id,
-    name: "",
-    dob: "",
-    race: "",
-    vaccinated: ""
+  const [nhanVien, setNhanVien] = useState({
+    MANV: id,
+    HOTEN: "",
+    SDT: "",
   });
   useEffect(()=>{
     if(id==='new') return;
-    petService.get(id)
+    nhanVienService.get(id)
       .then(response => {
         if(response.data.errCode===0){
-          setPet(response.data.data);
+          console.log(response.data.data);
+          setNhanVien(response.data.data[0]);
+        }else{
+          console.log(response.errMessage);
         }
       })
       .catch(e => {
@@ -27,20 +28,20 @@ export default function EditAndAddPet() {
   }, []);
 
   const handleOnchange = (e)=>{
-    let petTmp = {...pet};
-    petTmp[e.target.name] = e.target.value;
-    setPet(petTmp);
+    let nhanVienTmp = {...nhanVien};
+    nhanVienTmp[e.target.name] = e.target.value;
+    setNhanVien(nhanVienTmp);
   }
   const handleOnchangeCheckbox = (e)=>{
-    let petTmp = {...pet};
-    petTmp[e.target.name] = e.target.checked?1:0;
-    setPet(petTmp);
+    let nhanVienTmp = {...nhanVien};
+    nhanVienTmp[e.target.name] = e.target.checked?1:0;
+    setNhanVien(nhanVienTmp);
   }
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
     if(id==="new"){
-      petService.create(pet)
+      nhanVienService.create(nhanVien)
       .then(response => {
         console.log(response);
         if(response.data.errCode===0){
@@ -52,9 +53,11 @@ export default function EditAndAddPet() {
       });
       
     }else{
-      petService.update(pet);
+      console.log(nhanVien);
+      nhanVienService.update(nhanVien);
     }
-    return navigate("/");
+    navigate("/");
+    window.location.reload();
     // props.history.push("/");
   }
   return (
@@ -62,50 +65,28 @@ export default function EditAndAddPet() {
       <form>
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="HOTEN">Ho va ten</label>
             <input
               type="text"
               className="form-control"
-              name="name"
-              placeholder="Pet's name"
-              value={pet.name}
+              name="HOTEN"
+              placeholder="Ho va ten"
+              value={nhanVien.HOTEN}
               required
               onChange={handleOnchange}
             />
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="dob">Date of birth</label>
-            <input
-              type="date"
-              className="form-control"
-              name="dob"
-              placeholder="Pet's dob"
-              value={pet.dob}
-              required
-              onChange={handleOnchange}
-
-            />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="race">Race</label>
+            <label htmlFor="SDT"></label>
             <input
               type="text"
               className="form-control"
-              name="race"
-              placeholder="Pet's race"
-              value={pet.race}
+              name="SDT"
+              placeholder="So dien thoai"
+              value={nhanVien.SDT}
               required
               onChange={handleOnchange}
 
-            />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="vaccinated">Vaccinated</label>
-            <input 
-            type="checkbox"
-            name="vaccinated"
-            checked={pet.vaccinated===1?true:false}
-            onChange={handleOnchangeCheckbox}
             />
           </div>
         </div>
@@ -115,7 +96,7 @@ export default function EditAndAddPet() {
             className="btn btn-primary"
             onClick={handleSubmit}
           >
-           {id ==='new' ? "Create Pet" : "Update"}
+           {id ==='new' ? "Create NhanVien" : "Update"}
           </button>
         </div>
       </form>

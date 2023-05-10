@@ -1,7 +1,7 @@
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-import PetsList from "./components/PetsList";
-import EditAndAddPet from './components/EditAndAddPet';
+import NhanViensList from "./components/NhanViensList";
+import EditAndAddNhanVien from './components/EditAndAddNhanVien';
 import { Routes, Route, Link } from 'react-router-dom';
 
 function App() {
@@ -10,15 +10,16 @@ function App() {
 
     <div className='App'>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <a href="/pets" className="navbar-brand">
-          dungptit
+        <a href="/nhanViens" className="navbar-brand">
+          CSDLPTNHOM6
         </a>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/pets"} className="nav-link">
-              Pets
+            <Link to={"/nhanViens"} className="nav-link">
+              NhanViens
             </Link>
           </li>
+
           {/* <li className="nav-item">
             <Link to={"/add"} className="nav-link">
               Add
@@ -28,9 +29,10 @@ function App() {
       </nav>
       <div className="container mt-3">
         <Routes>
-          <Route path='/' element={<PetsList/>}/>
-          <Route path='/pets' element={<PetsList/>}/>
-          <Route path='/pet/:id' element={<EditAndAddPet/>}/>
+          <Route path='/' element={<NhanViensList/>}/>
+          <Route path='/nhanViens' element={<NhanViensList/>}/>
+          <Route path='/nhanVien/:id' element={<EditAndAddNhanVien/>}/>
+          <Route path='/nhanVien/new/:id' element={<EditAndAddNhanVien/>}/>
         </Routes>
       </div>
     </div>
