@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import nhanVienService from '../services/nhanVienService';
+import khoService from '../../services/khoService';
 
-export default function EditAndAddNhanVien() {
+export default function EditAndAddKho() {
   const {id} = useParams();
   const navigate = useNavigate();
   const [errMessage, setErrMessage] = useState("");
-  const [nhanVien, setNhanVien] = useState({
-    MANV: "",
-    HOTEN: "",
-    SDT: "",
-    DIACHI: "",
-    CHUCVU: "",
-    LUONG: ""
+  const [kho, setKho] = useState({
+    MAKHO: "",
+    TENKHO: "",
+    MACN: "",
+    DIACHI: ""
   });
   useEffect(()=>{
     if(id==='new') return;
-    nhanVienService.get(id).then(
+    khoService.get(id).then(
       (response) => {
         if(response.data.errCode===0){
-          // console.log(response.data.data);
-          setNhanVien(response.data.data[0]);
+          setKho(response.data.data[0]);
         }
       }, (error) => {
         const resMessage =
@@ -39,24 +36,18 @@ export default function EditAndAddNhanVien() {
   }, []);
 
   const handleOnchange = (e)=>{
-    let nhanVienTmp = {...nhanVien};
-    nhanVienTmp[e.target.name] = e.target.value;
-    setNhanVien(nhanVienTmp);
+    let khoTmp = {...kho};
+    khoTmp[e.target.name] = e.target.value;
+    setKho(khoTmp);
   }
-  const handleOnchangeCheckbox = (e)=>{
-    let nhanVienTmp = {...nhanVien};
-    nhanVienTmp[e.target.name] = e.target.checked?1:0;
-    setNhanVien(nhanVienTmp);
-  }
-
   const handleSubmit = async(e)=>{
     e.preventDefault();
     if(id==="new"){
-      nhanVienService.create(nhanVien).then(
+      khoService.create(kho).then(
       (response) => {
         console.log(response);
         if(response.data.errCode===0){
-          navigate("/");
+          navigate("/kho");
           window.location.reload();
         }else{
           setErrMessage(response.data.errMessage);
@@ -68,20 +59,17 @@ export default function EditAndAddNhanVien() {
             error.response.data.message) ||
           error.message ||
           error.toString();
-          console.log("check ", resMessage);
         setErrMessage(resMessage);
       })
       .catch(e => {
-        // setErrMessage(e);
         console.log(e);
       });
       
     }else{
-      console.log(nhanVien);
-      nhanVienService.update(nhanVien).then(response => {
+      khoService.update(kho).then(response => {
         console.log(response);
         if(response.data.errCode===0){
-          navigate("/");
+          navigate("/kho");
           window.location.reload();
         }else{
           setErrMessage(response.data.errMessage);
@@ -113,38 +101,39 @@ export default function EditAndAddNhanVien() {
       }
       <form>
         <div className="form-group col-md-6">
-            <label>Ma nhan vien(NV01xxx)</label>
+            <label>Ma KHO(K01xxx)</label>
             <input
               type="text"
               className="form-control"
-              name="MANV"
-              placeholder="Ma nhan vien"
-              value={nhanVien.MANV}
+              name="MAKHO"
+              placeholder="Ma kho"
+              value={kho.MAKHO}
               disabled = {id==="new"?false: true}
               required
               onChange={handleOnchange}
             />
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="HOTEN">Ho va ten</label>
+            <label htmlFor="HOTEN">Ten kho</label>
             <input
               type="text"
               className="form-control"
-              name="HOTEN"
-              placeholder="Ho va ten"
-              value={nhanVien.HOTEN}
+              name="TENKHO"
+              placeholder="Ten kho"
+              value={kho.TENKHO}
               required
               onChange={handleOnchange}
             />
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="SDT">So dien thoai</label>
+            <label htmlFor="MACN">MA CHI NHANH</label>
             <input
               type="text"
               className="form-control"
-              name="SDT"
-              placeholder="So dien thoai"
-              value={nhanVien.SDT}
+              name="MACN"
+              placeholder="Ma chi nhanh"
+              value={kho.MACN}
+              disabled = {id==="new"?false: true}
               required
               onChange={handleOnchange}
 
@@ -157,46 +146,21 @@ export default function EditAndAddNhanVien() {
               className="form-control"
               name="DIACHI"
               placeholder="Dia chi"
-              value={nhanVien.DIACHI}
+              value={kho.DIACHI}
               required
               onChange={handleOnchange}
 
             />
           </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="CHUCVU">Chuc vu</label>
-            <input
-              type="text"
-              className="form-control"
-              name="CHUCVU"
-              placeholder="Chuc vu"
-              value={nhanVien.CHUCVU}
-              required
-              onChange={handleOnchange}
-
-            />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="LUONG">Luong</label>
-            <input
-              type="text"
-              className="form-control"
-              name="LUONG"
-              placeholder="Luong"
-              value={nhanVien.LUONG}
-              required
-              onChange={handleOnchange}
-
-            />
-          </div>
-       
+          
+          
         {/* <input type="text" name="id" value={id} hidden /> */}
         <div className="form-group col-md-6 mt-3">
           <button
             className="btn btn-primary"
             onClick={handleSubmit}
           >
-           {id ==='new' ? "Create NhanVien" : "Update"}
+           {id ==='new' ? "Create Kho" : "Update"}
           </button>
         </div>
       </form>

@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import nhanVienService from "../services/nhanVienService";
+import khoService from "../../services/khoService";
 
-const NhanViensList = () => {
-  const [nhanViens, setNhanViens] = useState([]);
-  const [currentTutorial, setCurrentTutorial] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(-1);
+const KhoList = () => {
+  const [khos, setKhos] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate();
-  const id="";
   useEffect(() => {
-    retrieveNhanViens();
+    retrieveKhos();
   }, []);
 
   const onChangeSearchTitle = e => {
@@ -19,13 +16,13 @@ const NhanViensList = () => {
     setSearchTitle(searchTitle);
   };
 
-  const retrieveNhanViens = () => {
+  const retrieveKhos = () => {
     try{
-      nhanVienService.getAll()
+      khoService.getAll()
       .then(response => {
         if(response.data.errCode===0){
           console.log(response.data);
-          setNhanViens(response.data.data);
+          setKhos(response.data.data);
         }
         // console.log(response.data);
       } , (error) => {
@@ -35,7 +32,6 @@ const NhanViensList = () => {
             error.response.data.message) ||
           error.message ||
           error.toString();
-          console.log("check ", resMessage);
         setErrMessage(resMessage);
       })
       .catch(e => {
@@ -46,10 +42,10 @@ const NhanViensList = () => {
     }
     
   };
-  const handleDeleteNhanVien = (idNhanVien)=>{
+  const handleDeleteKho = (idKho)=>{
     try{
-      console.log(idNhanVien);
-      nhanVienService.remove(idNhanVien).then((response)=>{
+      console.log(idKho);
+      khoService.remove(idKho).then((response)=>{
         if(response.data.errCode===0){
           window.location.reload();
         }else{
@@ -73,10 +69,10 @@ const NhanViensList = () => {
 
   const findByTitle = () => {
     try{
-      nhanVienService.findByName(searchTitle)
+      khoService.findByName(searchTitle)
       .then(response => {
         if(response.data.errCode===0){
-          setNhanViens(response.data.data);
+          setKhos(response.data.data);
         }
         // console.log(response.data);
       })
@@ -120,32 +116,28 @@ const NhanViensList = () => {
         <table className="table">
           <thead className="table-success">
             <tr>
-              <th>STT</th>
-              <th>Ho va ten </th>
-              <th>So dien thoai</th>
+              <th>Ma kho</th>
+              <th>Ten kho </th>
+              <th>Ma chi nhanh</th>
               <th>Dia chi</th>
-              <th>Chuc vu</th>
-              <th>Luong</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {nhanViens&&
-              nhanViens.map((nhanVien, index)=>(
+            {khos&&
+              khos.map((kho, index)=>(
                 <tr key={index}>
-                  <td>{nhanVien.MANV}</td>
-                  <td>{nhanVien.HOTEN}</td>
-                  <td>{nhanVien.SDT}</td>
-                  <td>{nhanVien.DIACHI}</td>
-                  <td>{nhanVien.CHUCVU}</td>
-                  <td>{nhanVien.LUONG}</td>
-                  {/* <td>{nhanVien.race}</td>
+                  <td>{kho.MAKHO}</td>
+                  <td>{kho.TENKHO}</td>
+                  <td>{kho.MACN}</td>
+                  <td>{kho.DIACHI}</td>
+                  {/* <td>{kho.race}</td>
                   <td>
-                    <input type="checkbox" checked={nhanVien.vaccinated===1?true:false} disabled/>
+                    <input type="checkbox" checked={kho.vaccinated===1?true:false} disabled/>
                   </td> */}
                   <td>
-                    <button className="btn btn-warning" onClick={()=>navigate(`/nhanVien/${nhanVien.MANV}`)}>Edit</button>
-                    <button className="btn btn-danger" onClick={()=>{handleDeleteNhanVien(nhanVien.MANV)}}>Delete</button>
+                    <button className="btn btn-warning" onClick={()=>navigate(`/kho/${kho.MAKHO}`)}>Edit</button>
+                    <button className="btn btn-danger" onClick={()=>{handleDeleteKho(kho.MAKHO)}}>Delete</button>
                   </td>
                 </tr>
               ))
@@ -153,10 +145,10 @@ const NhanViensList = () => {
           </tbody>
         </table>
 
-        <button className="btn btn-success mt-3" onClick={()=>navigate(`/nhanVien/new`)}>New NhanVien</button>
+        <button className="btn btn-success mt-3" onClick={()=>navigate(`/kho/new`)}>New Kho</button>
       </div>
     </div>
   );
 };
 
-export default NhanViensList;
+export default KhoList;
