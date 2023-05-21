@@ -101,7 +101,7 @@ export default function EditAndAddKho() {
       }
       <form>
         <div className="form-group col-md-6">
-            <label>Ma KHO(K01xxx)</label>
+            <label>Ma KHO(K06xxx)</label>
             <input
               type="text"
               className="form-control"

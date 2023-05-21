@@ -113,7 +113,7 @@ export default function EditAndAddNhanVien() {
       }
       <form>
         <div className="form-group col-md-6">
-            <label>Ma nhan vien(NV01xxx)</label>
+            <label>Ma nhan vien(NV06xxx)</label>
             <input
               type="text"
               className="form-control"
